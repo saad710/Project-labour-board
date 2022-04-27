@@ -15,7 +15,7 @@ function App() {
      * initializing the widget.
      */
         ZOHO.embeddedApp.init().then(() => {
-        ZOHO.CRM.API.searchRecord({Entity:"FP_Projects",Type:"criteria",Query:"(((Project_Status:equals:Requested)and(Project_Status:equals:In Progress)))"})
+        ZOHO.CRM.API.searchRecord({Entity:"FP_Projects",Type:"criteria",Query:"(((Project_Status:equals:Requested)or(Project_Status:equals:In Progress)))"})
         .then(function(data){
         console.log(data)
        
