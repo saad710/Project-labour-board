@@ -1,23 +1,38 @@
 import logo from './logo.svg';
 import './App.css';
+import LabourBoard from "../src/components/LabourBoard"
+import { useEffect } from 'react';
+const ZOHO = window.ZOHO
 
 function App() {
+
+  useEffect(() => {
+    ZOHO.embeddedApp.on("PageLoad", function (data) {
+      console.log(data);
+      //Custom Bussiness logic goes here
+    });
+    /*
+     * initializing the widget.
+     */
+        ZOHO.embeddedApp.init().then(() => {
+        ZOHO.CRM.API.searchRecord({Entity:"FP_Projects",Type:"criteria",Query:"(((Project_Status:equals:Requested)and(Project_Status:equals:In Progress)))"})
+        .then(function(data){
+        console.log(data)
+       
+     
+
+})
+        });
+
+
+
+  }, []);
+
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="App" style={{padding:"2vh"}} >
+        <LabourBoard/>
     </div>
   );
 }
