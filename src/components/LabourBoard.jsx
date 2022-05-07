@@ -127,8 +127,14 @@ const LabourWorkData = [
   },
 ];
 
+
+const submittedHour = [
+  {Contratctor:"Contr - 167",job:"P22088a",hours:2}
+]
+
 const LabourBoard = (props) => {
-  const {projectData,painterData} = props;
+  const {projectData,painterData,hoursData} = props;
+  console.log(painterData)
   const { register, control, watch, handleSubmit, setValue } = useForm();
  
   console.log(projectData)
@@ -137,7 +143,31 @@ const LabourBoard = (props) => {
   console.log(allfields);
   const onSubmit = (data) => console.log(data);
 
-  const handlePainterVal = (e,field) => {
+  // useEffect(() => {
+  //   LabourWorkData.forEach(LabourInfo => {
+  //    const jobId = LabourInfo.Job
+  //    let wipValue = 0
+  //    LabourInfo.painters.forEach(painter => {
+  //      setValue(painter.name + "__" + jobId,4 )
+  //      wipValue += painter.value
+  //    })
+  //    setValue("wip" + "__" + jobId,wipValue)
+  //    let assessValue = watch("assess" + "__" + jobId);
+  //    if (/^\d+$/.test(assessValue)) {
+  //     assessValue = parseInt(assessValue);
+  //   } else {
+  //     assessValue = 0;
+  //   }
+  //   let toCompleteValue = assessValue - wipValue
+  //    setValue("toComplete" + "__" + jobId, toCompleteValue)
+  //   })
+  // },[])
+
+
+
+  const handlePainterVal = (e,field,data,info) => {
+    // setValue(info.First_Name + "__" + data.Job_Number,3)]\
+    console.log(e.target.value)
     console.log(field.name);
     field.onChange(e.target.value);
     const grabId = field.name.split("__")[1];
@@ -153,7 +183,7 @@ const LabourBoard = (props) => {
     // console.log(assessValue)
 
     console.log(watch());
-    // const allPainters = painterData;
+    // const allPainters = data.painters;
     // console.log({allPainters})
 
     let wipValue = 0;
@@ -235,7 +265,7 @@ const LabourBoard = (props) => {
               <TableCell sx={{ borderLeft: "1px solid black" }}>
                 Status
               </TableCell>
-              {/* {painterData?.map((painterInfo, index) => (
+              {painterData?.map((painterInfo, index) => (
                 <TableCell
                   sx={{
                     borderLeft: "1px solid black",
@@ -247,7 +277,7 @@ const LabourBoard = (props) => {
                 >
                   {painterInfo.First_Name}
                 </TableCell>
-              ))} */}
+              ))}
             </TableRow>
           </TableHead>
           <TableHead>
@@ -513,15 +543,20 @@ const LabourBoard = (props) => {
                     <Controller
                       name={info.First_Name + "__" + data.Job_Number}
                       control={control}
+                      // defaultValue={4}
                       render={({ field }) => (
                         <TextField
                           fullWidth
                           {...field}
                           id="standard-basic"
                           variant="standard"
-                          onChange={(e) => {
-                            handlePainterVal(e,field)
-                          }}
+                          defaultValue={field.value}
+                        
+                      //     value= {hoursData?.map(sub => (
+                      //     sub.Contratctor?.name === info.Name && data.Name === sub.Project?.name ?  sub.Submitted_Hours : ""
+                      // ))}
+                      
+                          onChange={(e) => handlePainterVal(e,field,data,info)}
                           InputProps={{
                             disableUnderline: true,
                           }}
@@ -530,6 +565,7 @@ const LabourBoard = (props) => {
                     />
                   </TableCell>
                 ))}
+
               </TableRow>
             ))}
           </TableBody>

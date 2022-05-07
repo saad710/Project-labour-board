@@ -7,6 +7,7 @@ const ZOHO = window.ZOHO;
 function App() {
   const [projectData,setProjectData] = useState(null)
   const [painterData,setPainterData] = useState(null)
+  const [hoursData,setHoursData] = useState(null)
   const [zohoLoaded,setZohoLoaded] = useState(false)
    
   useEffect(() => {
@@ -30,7 +31,7 @@ function App() {
       "(((Project_Status:equals:Requested)or(Project_Status:equals:In Progress)))",
   }).then(function (data) {
     console.log("Project Data ", data);
-    setProjectData(data?.data)
+    setProjectData(data?.data.slice(0,20))
     
   });
   ZOHO.CRM.API.searchRecord({
@@ -39,20 +40,26 @@ function App() {
     Query:"(Contractor_Status:equals:Active)",
   }).then(function (data) {
     console.log("Painter Data ", data);
-    setPainterData(data?.data)
+    setPainterData(data?.data.slice(0,4))
   });
+
+  ZOHO.CRM.API.getAllRecords({Entity:"Hours_Submitted",sort_order:"asc"})
+.then(function(data){
+   console.log(data)
+   setHoursData(data?.data)
+})
  }
   }, [zohoLoaded])
 
       // {/* <>{JSON.stringify(projectData)}{JSON.stringify(painterData)}</> */}
 
+if(projectData && painterData && hoursData){
   return (
     <div className="App" style={{ padding: "2vh" }}>
-    
-        <LabourBoard projectData={projectData} painterData={painterData} />
-      
+        <LabourBoard projectData={projectData} painterData={painterData} hoursData={hoursData} />
     </div>
   );
+}
 }
 
 export default App;
