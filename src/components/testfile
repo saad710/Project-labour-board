@@ -1,0 +1,27 @@
+// const workdata={
+//   '12312312412354':{
+//    painters
+//   }
+// }
+
+// //fp_projects
+// [{},{}].forEach(data=>{
+//   workData[data.id]={
+
+//   }
+// })
+
+// //hours submitter
+// data.forEach(itm=>{
+
+//   updatedPaintersInfo=workdata[itm.Projects.id].painters.map(painter=>{
+ // if(itm.id===painter.id){
+
+ }
+})
+//   
+//   workdata[itm.Projects.id]={
+//     ...workdata[itm.Contrtactor.id],
+//     painters:
+//   }
+// })

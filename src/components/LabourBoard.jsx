@@ -143,6 +143,105 @@ const LabourBoard = (props) => {
   console.log(allfields);
   const onSubmit = (data) => console.log(data);
 
+
+  const updatedPaintersInfo = painterData?.map(painter => (
+      {id:painter.id,painter_name:painter.First_Name,painter_match_name:painter.Name,value:0}
+  ))
+  console.log(updatedPaintersInfo)
+
+  let workData = {}
+  projectData?.forEach(project => {
+    workData[project.id] = {
+      id: project.id,
+      Job_Number : project.Job_Number,
+      WIP : project.WIP,
+      To_Complete : project.To_Complete,
+      Office_Budget: project.Budget_hours,
+      Assess : project.Painter_Estimate,
+      Status: project.Project_Status,
+      Date:project.Es,
+      Account_name:project.Account_name,
+      Project_Name : project.Name,
+      painters: updatedPaintersInfo
+    }
+  })
+  console.log(workData)
+
+  const updateHourData = hoursData.map(hour => ( 
+    {id:hour.id,contractor_name:hour.Contractor.name,contractor_id:hour.Contractor.id,project:hour.Project.name,hourSubmitted:hour.Submitted_Hours,Project_id:hour.Project.id}
+  ))
+  console.log(updateHourData)
+
+  let updateWorkData;
+  updateHourData?.forEach(itemData => {
+    updateWorkData = workData[itemData.Project_id].painters.map(painter => {
+      if(painter.id === itemData.Project_id){
+        return {...painter,value:painter.value}
+      }
+    })
+  })
+  console.log(updateWorkData)
+
+  // let PaintersInfo;
+  // updateHourData?.forEach(updateData => {
+  //     PaintersInfo = workData[updateData.Project_id].painters.map(painter => {
+  //         if(updateData.contractor_id === painter.id){
+  //            return painter.value = updateData.hourSubmitted
+  //         }
+  //     })
+  // })
+  // console.log(PaintersInfo)
+
+
+
+  // //hours submitter
+// data.forEach(itm=>{
+
+//   updatedPaintersInfo=workdata[itm.Projects.id].painters.map(painter=>{
+ // if(itm.id===painter.id){
+
+
+
+
+ 
+
+  useEffect(() => {
+    // LabourWorkData.forEach(LabourInfo => {
+    //  const jobId = LabourInfo.Job
+    //  let wipValue = 0
+    //  LabourInfo.painters.forEach(painter => {
+    //    setValue(painter.name + "__" + jobId,painter.value )
+    //    wipValue += painter.value
+    //  })
+    //  setValue("wip" + "__" + jobId,wipValue)
+    //  let assessValue = watch("assess" + "__" + jobId);
+    //  if (/^\d+$/.test(assessValue)) {
+    //   assessValue = parseInt(assessValue);
+    // } else {
+    //   assessValue = 0;
+    // }
+    // let toCompleteValue = assessValue - wipValue
+    //  setValue("toComplete" + "__" + jobId, toCompleteValue)
+    // })
+    projectData?.forEach(project => {
+      // let projectName = project.Name
+      painterData?.forEach(painter => {
+        updateHourData.forEach(update => {
+          if(project?.Name === update?.project && painter?.Name === update?.contractor){
+            console.log("matched")
+              setValue(painter.First_Name + "__" + project.Job_Number,update?.hourSubmitted)
+            
+          }
+        })
+      })
+      
+    })
+  },[])
+
+  // useEffect(() => {
+
+  // })
+
   // useEffect(() => {
   //   LabourWorkData.forEach(LabourInfo => {
   //    const jobId = LabourInfo.Job
@@ -545,6 +644,7 @@ const LabourBoard = (props) => {
                       control={control}
                       // defaultValue={4}
                       render={({ field }) => (
+                        
                         <TextField
                           fullWidth
                           {...field}
@@ -576,3 +676,7 @@ const LabourBoard = (props) => {
 };
 
 export default LabourBoard;
+
+
+
+

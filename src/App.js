@@ -31,7 +31,7 @@ function App() {
       "(((Project_Status:equals:Requested)or(Project_Status:equals:In Progress)))",
   }).then(function (data) {
     console.log("Project Data ", data);
-    setProjectData(data?.data.slice(0,20))
+    setProjectData(data?.data)
     
   });
   ZOHO.CRM.API.searchRecord({
@@ -40,7 +40,7 @@ function App() {
     Query:"(Contractor_Status:equals:Active)",
   }).then(function (data) {
     console.log("Painter Data ", data);
-    setPainterData(data?.data.slice(0,4))
+    setPainterData(data?.data.slice(0,5))
   });
 
   ZOHO.CRM.API.getAllRecords({Entity:"Hours_Submitted",sort_order:"asc"})
