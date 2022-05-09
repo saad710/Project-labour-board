@@ -5,61 +5,69 @@ import { useEffect, useState } from "react";
 const ZOHO = window.ZOHO;
 
 function App() {
-  const [projectData,setProjectData] = useState(null)
-  const [painterData,setPainterData] = useState(null)
-  const [hoursData,setHoursData] = useState(null)
-  const [zohoLoaded,setZohoLoaded] = useState(false)
-   
+  const [projectData, setProjectData] = useState(null);
+  const [painterData, setPainterData] = useState(null);
+  const [hoursData, setHoursData] = useState(null);
+  const [zohoLoaded, setZohoLoaded] = useState(false);
+
   useEffect(() => {
     ZOHO.embeddedApp.on("PageLoad", function (data) {
       //Custom Bussiness logic goes here
+      console.log(data)
     });
     /*
      * initializing the widget.
      */
     ZOHO.embeddedApp.init().then(() => {
-     setZohoLoaded(true);
+      setZohoLoaded(true);
     });
   }, []);
 
-  useEffect(()=> {
- if(zohoLoaded){
-  ZOHO.CRM.API.searchRecord({
-    Entity: "FP_Projects",
-    Type: "criteria",
-    Query:
-      "(((Project_Status:equals:Requested)or(Project_Status:equals:In Progress)))",
-  }).then(function (data) {
-    console.log("Project Data ", data);
-    setProjectData(data?.data)
-    
-  });
-  ZOHO.CRM.API.searchRecord({
-    Entity: "Contractors",
-    Type: "criteria",
-    Query:"(Contractor_Status:equals:Active)",
-  }).then(function (data) {
-    console.log("Painter Data ", data);
-    setPainterData(data?.data.slice(0,5))
-  });
+  useEffect(() => {
+    if (zohoLoaded) {
+      ZOHO.CRM.API.searchRecord({
+        Entity: "FP_Projects",
+        Type: "criteria",
+        Query:
+          "(((Project_Status:equals:Requested)or(Project_Status:equals:In Progress)))",
+      }).then(function (data) {
+        console.log("Project Data ", data);
+        setProjectData(data?.data);
+      });
+      ZOHO.CRM.API.searchRecord({
+        Entity: "Contractors",
+        Type: "criteria",
+        Query: "(Contractor_Status:equals:Active)",
+      }).then(function (data) {
+        console.log("Painter Data ", data);
+        setPainterData(data?.data);
+      });
 
-  ZOHO.CRM.API.getAllRecords({Entity:"Hours_Submitted",sort_order:"asc"})
-.then(function(data){
-   console.log(data)
-   setHoursData(data?.data)
-})
- }
-  }, [zohoLoaded])
+      ZOHO.CRM.API.getAllRecords({
+        Entity: "Hours_Submitted",
+        sort_order: "asc",
+      }).then(function (data) {
+        console.log(data);
+        setHoursData(data?.data);
+      });
+    }
+  }, [zohoLoaded]);
 
-      // {/* <>{JSON.stringify(projectData)}{JSON.stringify(painterData)}</> */}
+  // {/* <>{JSON.stringify(projectData)}{JSON.stringify(painterData)}</> */}
 
-if(projectData && painterData && hoursData){
+  if (!projectData || !painterData || !hoursData) {
+    return <div>Loading....</div>;
+  }
+
   return (
     <div className="App" style={{ padding: "2vh" }}>
-        <LabourBoard projectData={projectData} painterData={painterData} hoursData={hoursData} />
+      <LabourBoard
+        projectData={projectData}
+        painterData={painterData}
+        hoursData={hoursData}
+      />
     </div>
   );
-}
 }
 
 export default App;
