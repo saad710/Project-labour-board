@@ -141,56 +141,8 @@ const LabourBoard = (props) => {
   console.log(allfields);
   const onSubmit = (data) => console.log(data);
 
-  // const updatedPaintersInfo = painterData?.map((painter) => ({
-  //   id: painter.id,
-  //   painter_name: painter.First_Name,
-  //   painter_match_name: painter.Name,
-  //   value: null,
-  // }));
-  // console.log(updatedPaintersInfo);
-
-  // const updateHourData = hoursData.map((hour) => ({
-  //   id: hour.id,
-  //   contractor_name: hour.Contractor.name,
-  //   contractor_id: hour.Contractor.id,
-  //   project: hour.Project.name,
-  //   hourSubmitted: hour.Submitted_Hours,
-  //   Project_id: hour.Project.id,
-  // }));
-  // console.log(updateHourData);
-
-  // let mergeData;
-  // updateHourData?.forEach((infoUpdate) => {
-  //   mergeData = updatedPaintersInfo?.map((data) =>
-  //     infoUpdate.contractor_id === data.id
-  //       ? {
-  //           ...data,
-  //           Project_id: infoUpdate.Project_id,
-  //           hourSubmitted: infoUpdate.hourSubmitted,
-  //         }
-  //       : { ...data, Project_id: null, hourSubmitted: null }
-  //   );
-  // });
-  // console.log(mergeData);
-
-  // let workData = {}
-  // projectData?.forEach(project => {
-  //   workData[project.id] = {
-  //     id: project.id,
-  //     Job_Number : project.Job_Number,
-  //     WIP : project.WIP,
-  //     To_Complete : project.To_Complete,
-  //     Office_Budget: project.Budget_hours,
-  //     Assess : project.Painter_Estimate,
-  //     Status: project.Project_Status,
-  //     Date:project.Es,
-  //     Account_name:project.Account_name,
-  //     Project_Name : project.Name,
-  //     painters: updateHourData.filter(update => update.Project_id === project.id)
-  //   }
-  // })
-  // console.log(workData)
-
+ 
+  //add_contractors_data_in_fp_projects
   let LabourWorkData = {};
   projectData?.forEach(
     (project) =>
@@ -213,6 +165,8 @@ const LabourBoard = (props) => {
       })
   );
   
+
+  //add_hour_submitted_data_with_matching_contractor_id
   hoursData.forEach((hour) => {
     const updatedPainterData = LabourWorkData[hour.Project.id].painters.map(
       (painter) => {
@@ -227,128 +181,25 @@ const LabourBoard = (props) => {
     });
     console.log(LabourWorkData);
 
-  // let updateWorkData;
-  // updateHourData?.forEach(itemData => {
-  //   updateWorkData = workData[itemData.Project_id].painters.map(painter => (
-  //     if(painter.id === itemData.Project_id){
-  //       return {...painter,value:painter.value}
-  //     }
-  //   ))
-  // })
-  // console.log(updateWorkData)
 
-  // let newData;
-  // updateHourData?.forEach(item => {
-  //   console.log(item.Project_id)
-  //     newData = workData[item.Project_id].painters?.map(painter => (
 
-  //       painter.id === item.contractor_id ?
-  //         {...painter,value:item.hourSubmitted}  : {...painter}
 
-  //     ))
-  //     console.log(newData)
-  // })
 
-  // //hours submitter
-  // data.forEach(itm=>{
-
-  //   updatedPaintersInfo=workdata[itm.Projects.id].painters.map(painter=>{
-  // if(itm.id===painter.id){
-
-  // useEffect(() => {
-
-  //   projectData?.forEach(project => {
-  //     // let projectName = project.Name
-  //     painterData?.forEach(painter => {
-  //       updateHourData.forEach(update => {
-  //         if(project?.Name === update?.project && painter?.Name === update?.contractor){
-  //           console.log("matched")
-  //             setValue(painter.First_Name + "__" + project.Job_Number,update?.hourSubmitted)
-
-  //         }
-  //       })
-  //     })
-
-  //   })
-  // },[])
-
-  // useEffect(() => {
-
-  // })
-
-  // useEffect(() => {
-  //   LabourWorkData.forEach(LabourInfo => {
-  //    const jobId = LabourInfo.Job
-  //    let wipValue = 0
-  //    LabourInfo.painters.forEach(painter => {
-  //      setValue(painter.name + "__" + jobId,4 )
-  //      wipValue += painter.value
-  //    })
-  //    setValue("wip" + "__" + jobId,wipValue)
-  //    let assessValue = watch("assess" + "__" + jobId);
-  //    if (/^\d+$/.test(assessValue)) {
-  //     assessValue = parseInt(assessValue);
-  //   } else {
-  //     assessValue = 0;
-  //   }
-  //   let toCompleteValue = assessValue - wipValue
-  //    setValue("toComplete" + "__" + jobId, toCompleteValue)
-  //   })
-  // },[])
-
-  const handlePainterVal = (e, field, data, info) => {
-    // setValue(info.First_Name + "__" + data.Job_Number,3)]\
-    console.log(e.target.value);
-    console.log(field.name);
-    field.onChange(e.target.value);
-    const grabId = field.name.split("__")[1];
-    console.log(grabId);
-    let assessValue = watch("assess" + "__" + grabId) || 0;
-
-    if (/^\d+$/.test(assessValue)) {
-      assessValue = parseInt(assessValue);
-    } else {
-      assessValue = 0;
-    }
-    // console.log(assessValue)
-
-    console.log(watch());
-    // const allPainters = data.painters;
-    // console.log({allPainters})
-
-    let wipValue = 0;
-    let toCompleteValue;
-
-    painterData.forEach((painter) => {
-      const value = watch(painter.First_Name + "__" + grabId);
-
-      const regex = /^\d+$/;
-
-      wipValue += regex.test(value) ? parseInt(value) : 0;
-    });
-    // console.log("assess",assessValue)
-    // console.log("wip",wipValue)
-    toCompleteValue = assessValue - wipValue;
-    console.log({ toCompleteValue });
-    setValue("toComplete__" + grabId, toCompleteValue);
-    setValue("wip__" + grabId, wipValue);
-
-    console.log({ wipValue });
-  };
-
+    //contractor_default_value_calculation
   useEffect(() => {
-    LabourWorkData.forEach((LabourInfo) => {
-      const jobId = LabourInfo.Job;
+    Object.keys(LabourWorkData).map((xData,ind) => {
+      const jobId = LabourWorkData[xData].Job;
       let wipValue = 0;
-      LabourInfo.painters.forEach((painter) => {
-        if (LabourInfo.id === painter.Project_id) {
-          setValue(painter.painter_name + "__" + jobId, painter?.hourSubmitted);
-          wipValue += painter?.hourSubmitted;
-        }
+      LabourWorkData[xData].painters.forEach((painter) => {
+        
+          setValue(painter.First_Name + "__" + jobId, painter?.value !== null ? painter.value : 0);
+          wipValue += painter?.value ? painter.value : 0;
+        
         //  else{
         //   setValue(painter.painter_name + "__" + jobId,0)
         //  }
       });
+      // console.log(LabourWorkData)
       setValue("wip" + "__" + jobId, wipValue);
       let assessValue = watch("assess" + "__" + jobId);
       if (/^\d+$/.test(assessValue)) {
@@ -360,6 +211,8 @@ const LabourBoard = (props) => {
       setValue("toComplete" + "__" + jobId, toCompleteValue);
     });
   }, []);
+
+
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -419,7 +272,7 @@ const LabourBoard = (props) => {
               <TableCell sx={{ borderLeft: "1px solid black" }}>
                 Status
               </TableCell>
-              {LabourWorkData?.map((Labour, index) => (
+              {painterData?.map((Labour, index) => (
                 <TableCell
                   sx={{
                     borderLeft: "1px solid black",
@@ -429,7 +282,7 @@ const LabourBoard = (props) => {
                   }}
                   key={index}
                 >
-                  {Labour.painter_name}
+                 {Labour.First_Name}
                 </TableCell>
               ))}
             </TableRow>
@@ -471,7 +324,7 @@ const LabourBoard = (props) => {
                 To Compelte
               </TableCell>
               <TableCell sx={{ borderLeft: "1px solid black" }}></TableCell>
-              {updatedPaintersInfo?.map((name, index) => (
+              {painterData?.map((name, index) => (
                 <TableCell
                   sx={{ borderLeft: "1px solid black" }}
                   key={index}
@@ -480,12 +333,13 @@ const LabourBoard = (props) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {LabourWorkData?.map((data, rowindex) => (
-              <TableRow key={rowindex}>
+          {
+            Object.keys(LabourWorkData).map((xData,ind) => (
+              <TableRow key={ind}>
                 <TableCell>
                   <Controller
-                    name={"contact" + "__" + data.Job}
-                    defaultValue={data.Contact}
+                    name={"contact" + "__" + LabourWorkData[xData].Job}
+                    defaultValue={LabourWorkData[xData].Contact}
                     control={control}
                     render={({ field }) => (
                       <TextField
@@ -502,9 +356,9 @@ const LabourBoard = (props) => {
                 </TableCell>
                 <TableCell sx={{ borderLeft: "1px solid black" }}>
                   <Controller
-                    name={"date" + "__" + data.Job}
+                    name={"date" + "__" + LabourWorkData[xData].Job}
                     control={control}
-                    defaultValue={data.Date}
+                    defaultValue={LabourWorkData[xData].Date}
                     render={({ field }) => (
                       <TextField
                         fullWidth
@@ -520,9 +374,9 @@ const LabourBoard = (props) => {
                 </TableCell>
                 <TableCell sx={{ borderLeft: "1px solid black" }}>
                   <Controller
-                    name={"job" + "__" + data.Job}
+                    name={"job" + "__" + LabourWorkData[xData].Job}
                     control={control}
-                    defaultValue={data.Job}
+                    defaultValue={LabourWorkData[xData].Job}
                     render={({ field }) => (
                       <TextField
                         fullWidth
@@ -538,26 +392,8 @@ const LabourBoard = (props) => {
                 </TableCell>
                 <TableCell sx={{ borderLeft: "1px solid black" }}>
                   <Controller
-                    name={"client" + "__" + data.Job}
-                    defaultValue={data.Client}
-                    control={control}
-                    render={({ field }) => (
-                      <TextField
-                        fullWidth
-                        {...field}
-                        id="standard-basic"
-                        variant="standard"
-                        InputProps={{
-                          disableUnderline: true,
-                        }}
-                      />
-                    )}
-                  />
-                </TableCell>
-                <TableCell sx={{ borderLeft: "1px solid black" }}>
-                  <Controller
-                    name={"project" + "__" + data.Job}
-                    defaultValue={data.Project}
+                    name={"client" + "__" + LabourWorkData[xData].Job}
+                    defaultValue={LabourWorkData[xData].Client}
                     control={control}
                     render={({ field }) => (
                       <TextField
@@ -574,7 +410,8 @@ const LabourBoard = (props) => {
                 </TableCell>
                 <TableCell sx={{ borderLeft: "1px solid black" }}>
                   <Controller
-                    name={"officeBudget" + "__" + data.Job}
+                    name={"project" + "__" + LabourWorkData[xData].Job}
+                    defaultValue={LabourWorkData[xData].Project}
                     control={control}
                     render={({ field }) => (
                       <TextField
@@ -591,9 +428,26 @@ const LabourBoard = (props) => {
                 </TableCell>
                 <TableCell sx={{ borderLeft: "1px solid black" }}>
                   <Controller
-                    name={"assess" + "__" + data.Job}
+                    name={"officeBudget" + "__" + LabourWorkData[xData].Job}
                     control={control}
-                    defaultValue={data.Assess}
+                    render={({ field }) => (
+                      <TextField
+                        fullWidth
+                        {...field}
+                        id="standard-basic"
+                        variant="standard"
+                        InputProps={{
+                          disableUnderline: true,
+                        }}
+                      />
+                    )}
+                  />
+                </TableCell>
+                <TableCell sx={{ borderLeft: "1px solid black" }}>
+                  <Controller
+                    name={"assess" + "__" + LabourWorkData[xData].Job}
+                    control={control}
+                    defaultValue={LabourWorkData[xData].Assess}
                     render={({ field }) => (
                       <TextField
                         fullWidth
@@ -630,13 +484,13 @@ const LabourBoard = (props) => {
                   sx={{
                     borderLeft: "1px solid black",
                     backgroundColor:
-                      watch("toComplete__" + [data.Job]) < 0
+                      watch("toComplete__" + [LabourWorkData[xData].Job]) < 0
                         ? "red"
                         : "#addfad",
                   }}
                 >
                   <Controller
-                    name={"wip" + "__" + data.Job}
+                    name={"wip" + "__" + LabourWorkData[xData].Job}
                     control={control}
                     render={({ field }) => (
                       <TextField
@@ -660,13 +514,13 @@ const LabourBoard = (props) => {
                   sx={{
                     borderLeft: "1px solid black",
                     backgroundColor:
-                      watch("toComplete__" + [data.Job]) < 0
+                      watch("toComplete__" + [LabourWorkData[xData].Job]) < 0
                         ? "red"
                         : "#addfad",
                   }}
                 >
                   <Controller
-                    name={"toComplete" + "__" + data.Job}
+                    name={"toComplete" + "__" + LabourWorkData[xData].Job}
                     control={control}
                     render={({ field }) => (
                       <TextField
@@ -684,7 +538,7 @@ const LabourBoard = (props) => {
                 </TableCell>
                 <TableCell sx={{ borderLeft: "1px solid black" }}>
                   <Controller
-                    name={"status" + "__" + data.Job}
+                    name={"status" + "__" + LabourWorkData[xData].Job}
                     control={control}
                     render={({ field }) => (
                       <TextField
@@ -700,10 +554,10 @@ const LabourBoard = (props) => {
                     )}
                   />
                 </TableCell>
-                {/* {data.painters?.map((info, index) => (
+                {LabourWorkData[xData].painters?.map((info, index) => (
                   <TableCell sx={{ borderLeft: "1px solid black" }} key={index}>
                     <Controller
-                      name={info.painter_name + "__" + data.Job}
+                      name={info.painter_name + "__" + LabourWorkData[xData].Job}
                       control={control}
             
                       render={({ field }) => (
@@ -721,26 +575,20 @@ const LabourBoard = (props) => {
                             console.log(grabId);
                             let assessValue =
                               watch("assess" + "__" + grabId) || 0;
-
                             if (/^\d+$/.test(assessValue)) {
                               assessValue = parseInt(assessValue);
                             } else {
                               assessValue = 0;
                             }
                             // console.log(assessValue)
-
                             console.log(watch());
-                            const allPainters = data.painters;
+                            const allPainters = LabourWorkData[xData].painters;
                             // console.log({allPainters})
-
                             let wipValue = 0;
                             let toCompleteValue;
-
                             allPainters.forEach((painter) => {
-                              const value = watch(painter.painter_name + "__" + grabId);
-
+                              const value = watch(painter.First_Name + "__" + grabId);
                               const regex = /^\d+$/;
-
                               wipValue += regex.test(value)
                                 ? parseInt(value)
                                 : 0;
@@ -751,7 +599,6 @@ const LabourBoard = (props) => {
                             console.log({ toCompleteValue });
                             setValue("toComplete__" + grabId, toCompleteValue);
                             setValue("wip__" + grabId, wipValue);
-
                             console.log({ wipValue });
                           }}
                           InputProps={{
@@ -761,9 +608,11 @@ const LabourBoard = (props) => {
                       )}
                     />
                   </TableCell>
-                ))} */}
+                ))}
               </TableRow>
-            ))}
+            ))
+          }
+           
           </TableBody>
         </Table>
       </TableContainer>

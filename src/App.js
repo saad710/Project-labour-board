@@ -24,39 +24,42 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if (zohoLoaded) {
-      ZOHO.CRM.API.searchRecord({
-        Entity: "FP_Projects",
-        Type: "criteria",
-        Query:
-          "(((Project_Status:equals:Requested)or(Project_Status:equals:In Progress)))",
-      }).then(function (data) {
-        console.log("Project Data ", data);
-        setProjectData(data?.data);
-      });
-      ZOHO.CRM.API.searchRecord({
-        Entity: "Contractors",
-        Type: "criteria",
-        Query: "(Contractor_Status:equals:Active)",
-      }).then(function (data) {
-        console.log("Painter Data ", data);
-        setPainterData(data?.data);
-      });
-
-      ZOHO.CRM.API.getAllRecords({
-        Entity: "Hours_Submitted",
-        sort_order: "asc",
-      }).then(function (data) {
-        console.log(data);
-        setHoursData(data?.data);
-      });
+    async function getData(){
+      if (zohoLoaded) {
+        await ZOHO.CRM.API.searchRecord({
+          Entity: "FP_Projects",
+          Type: "criteria",
+          Query:
+            "(((Project_Status:equals:Requested)or(Project_Status:equals:In Progress)))",
+        }).then(function (data) {
+          console.log("Project Data ", data);
+          setProjectData(data?.data);
+        });
+        await ZOHO.CRM.API.searchRecord({
+          Entity: "Contractors",
+          Type: "criteria",
+          Query: "(Contractor_Status:equals:Active)",
+        }).then(function (data) {
+          console.log("Painter Data ", data);
+          setPainterData(data?.data);
+        });
+  
+        await ZOHO.CRM.API.getAllRecords({
+          Entity: "Hours_Submitted",
+          sort_order: "asc",
+        }).then(function (data) {
+          console.log(data);
+          setHoursData(data?.data);
+        });
+      }
     }
+    getData()
   }, [zohoLoaded]);
 
   // {/* <>{JSON.stringify(projectData)}{JSON.stringify(painterData)}</> */}
 
   if (!projectData || !painterData || !hoursData) {
-    return <div>Loading....</div>;
+    return <h2>Loading....</h2>;
   }
 
   return (
